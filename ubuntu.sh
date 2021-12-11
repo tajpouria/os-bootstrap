@@ -17,9 +17,9 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install -y apt-transport-https ca-certificates curl
 
-echo '✨ Installng apt packages'
+echo '✨ Installing apt packages'
 
-sudo apt install -y zsh git htop kubectl
+sudo apt install -y zsh git htop kubectl python3-pip
 
 echo '✨ Installing drivers'
 
@@ -59,7 +59,6 @@ git config --global user.name $GIT_USERNAME
 read -p "📝 Enter your Git email [tajpouria.dev@gmail.com]: " git_email
 git_email=${git_email:-'tajpouria.dev@gmail.com'}
 git config --global user.email $git_email
-git config --list
 
 echo '🚀 Generating a SSH key'
 ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
@@ -67,6 +66,13 @@ ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
 echo '🚀 Making projects directory'
 mkdir -p "$HOME/pro/src/github/$git_username"
 
+if ! command -v conda &> /dev/null
+then
+  echo '🚀 Installing miniconda'
+  wget -O /tmp/Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  sudo chmod +x /tmp/Miniconda3-latest-Linux-x86_64.sh
+  /tmp/Miniconda3-latest-Linux-x86_64.sh
+fi
 
 echo '🦴 Manual todos:'
 
