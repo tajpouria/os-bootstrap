@@ -19,7 +19,7 @@ sudo apt install -y apt-transport-https ca-certificates curl
 
 echo '✨ Installing apt packages'
 
-sudo apt install -y zsh git htop kubectl python3-pip
+sudo apt install -y zsh git htop kubectl python3-pip parcellite
 
 echo '✨ Installing drivers'
 
