@@ -14,14 +14,16 @@ sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://pack
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y apt-transport-https ca-certificates curl
+sudo apt install -y apt-transport-https ca-certificates gnupg curl
 
 echo '✨ Installing apt packages'
 
-sudo apt install -y zsh git htop kubectl python3-pip parcellite docker-ce
+sudo apt install -y zsh git htop kubectl python3-pip parcellite docker-ce google-cloud-sdk
 
 echo '✨ Installing drivers'
 
@@ -102,6 +104,7 @@ declare -a manual_todos=(
   '📝 Enable Brave sync'
   '📝 Enable VSCode Setting sync'
   '📝 Add the ~/.ssh/id_rsa.pub to your Github account SSH key'
+  '📝 initialize gcloud ($gcloud init)'
 )
 for t in "${manual_todos[@]}"; do
     echo $t
