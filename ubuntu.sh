@@ -47,7 +47,6 @@ then
   cp "$SCRIPT_DIR/.zshrc" $HOME
 fi
 
-
 if ! command -v conda &> /dev/null
 then
   echo '🚀 Placing miniconda'
@@ -55,7 +54,6 @@ then
   sudo chmod +x /tmp/Miniconda3-latest-Linux-x86_64.sh
   /tmp/Miniconda3-latest-Linux-x86_64.sh
 fi
-
 
 if ! command -v docker-compose &> /dev/null
 then
@@ -74,6 +72,16 @@ then
   node_version=${node_version:-'stable'}
   nvm install $node_version
   npm i -g yarn
+fi
+
+if ! command -v k9s &> /dev/null
+then
+  echo '🚀 Placing k9s'
+  k9s_pkg='k9s_Linux_x86_64.tar.gz'
+  wget -O "/tmp/$k9s_pkg" $(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | cut -d '"' -f 4 | grep "http.*$k9s_pkg")
+  tar -xvf "/tmp/$k9s_pkg"
+  sudo chmod +x "/tmp/$k9s_pkg"
+  sudo mv "/tmp/k9s" /usr/local/bin
 fi
 
 
@@ -113,7 +121,7 @@ done
 
 
 read -r -p "Do you want to reboot now? [Y/n]" response
-response=${response,,} # tolower
+response=${response,,} # toLower
 if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
   reboot
 fi
