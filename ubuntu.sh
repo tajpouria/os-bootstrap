@@ -32,7 +32,7 @@ sudo ubuntu-drivers autoinstall
 
 echo '✨ Installing snap packages'
 
-sudo snap install brave bitwarden skype
+sudo snap install brave bitwarden skype dbeaver-ce
 sudo snap install code --classic
 
 
