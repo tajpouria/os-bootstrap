@@ -19,7 +19,7 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyr
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y apt-transport-https ca-certificates gnupg curl
+sudo apt install -y apt-transport-https ca-certificates gnupg curl vim
 
 echo '✨ Installing apt packages'
 
@@ -81,7 +81,15 @@ then
   wget -O "/tmp/$k9s_pkg" $(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | cut -d '"' -f 4 | grep "http.*$k9s_pkg")
   tar -xvf "/tmp/$k9s_pkg"
   sudo chmod +x "/tmp/$k9s_pkg"
-  sudo mv "/tmp/k9s" /usr/local/bin
+  sudo mv /tmp/k9s /usr/local/bin
+fi
+
+if ! command -v kind &> /dev/null
+then
+  echo '🚀 Placing kind'
+  wget -O /tmp/kind $(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | cut -d '"' -f 4 | grep "http.*kind-linux-amd64")
+  sudo chmod +x /tmp/kind
+  sudo mv /tmp/kind /usr/local/bin
 fi
 
 
