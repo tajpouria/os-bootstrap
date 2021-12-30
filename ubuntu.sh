@@ -19,11 +19,11 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyr
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y apt-transport-https ca-certificates gnupg curl vim
+sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison
 
 echo '✨ Installing apt packages'
 
-sudo apt install -y zsh git htop kubectl python3-pip parcellite docker-ce google-cloud-sdk
+sudo apt install -y git htop kubectl python3-pip parcellite docker-ce google-cloud-sdk
 
 echo '✨ Installing drivers'
 
@@ -33,7 +33,7 @@ sudo ubuntu-drivers autoinstall
 echo '✨ Installing snap packages'
 
 sudo snap install brave bitwarden skype dbeaver-ce postman
-sudo snap install code --classic
+sudo snap install code kontena-lens --classic
 
 
 echo '✨ Installing other packages'
@@ -41,8 +41,9 @@ echo '✨ Installing other packages'
 if ! command -v zsh &> /dev/null
 then
   echo '🚀 Placing zsh'
+  sudo apt install -y zsh
   sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-  sudo chsh -s $(which zsh)
+  chsh -s $(which zsh)
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   cp "$SCRIPT_DIR/.zshrc" $HOME
 fi
@@ -67,21 +68,23 @@ then
   echo '🚀 Placing nvm'
   wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # load nvm
   read -p "📝 Enter your preferred node js version [stable]: " node_version
   node_version=${node_version:-'stable'}
   nvm install $node_version
   npm i -g yarn
 fi
 
-if ! command -v k9s &> /dev/null
+if ! command -v gvm &> /dev/null
 then
-  echo '🚀 Placing k9s'
-  k9s_pkg='k9s_Linux_x86_64.tar.gz'
-  wget -O "/tmp/$k9s_pkg" $(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | cut -d '"' -f 4 | grep "http.*$k9s_pkg")
-  tar -xvf "/tmp/$k9s_pkg"
-  sudo chmod +x "/tmp/$k9s_pkg"
-  sudo mv /tmp/k9s /usr/local/bin
+  echo '🚀 Placing gvm'
+  bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm" # load gvm
+  go_version=$(curl https://go.dev/VERSION\?m\=text)
+  read -p "📝 Enter your preferred go version [$go_version]: " go_version
+  go_version=${go_version:-"$go_version"}
+  gvm install $go_version
+  gvm use $go_version --default
 fi
 
 if ! command -v kind &> /dev/null
@@ -116,7 +119,6 @@ sudo usermod -aG docker ${USER}
 echo '🦴 Manual todos:'
 
 declare -a manual_todos=(
-  "📝 Enable NVIDIA (Performance Mode) from NVIDIA X Server Setting's Prime Profiles tab"
   '📝 Enable Brave sync'
   '📝 Enable VSCode Setting sync'
   '📝 Add the ~/.ssh/id_rsa.pub to your Github account SSH key'
