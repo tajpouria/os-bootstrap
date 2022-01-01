@@ -105,6 +105,7 @@ git config --global user.name $GIT_USERNAME
 read -p "📝 Enter your Git email [tajpouria.dev@gmail.com]: " git_email
 git_email=${git_email:-'tajpouria.dev@gmail.com'}
 git config --global user.email $git_email
+git config --global core.editor "vim"
 
 echo '🚀 Generating a SSH key'
 ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
