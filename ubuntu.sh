@@ -29,7 +29,7 @@ sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com 
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison virtualbox vagrant
+sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison virtualbox vagrant unrar
 
 echo '✨ Installing apt packages'
 
