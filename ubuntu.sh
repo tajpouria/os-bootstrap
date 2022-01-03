@@ -105,6 +105,14 @@ then
   sudo mv /tmp/kind /usr/local/bin
 fi
 
+if ! command -v ghget &> /dev/null
+then
+  echo '🚀 Placing ghget'
+  wget -O /tmp/ghget https://github.com/mohd-akram/ghget/raw/master/ghget
+  sudo chmod +x /tmp/ghget
+  sudo mv /tmp/ghget /usr/local/bin
+fi
+
 
 echo '📌 Tunning configurations'
 
