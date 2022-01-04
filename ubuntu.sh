@@ -29,7 +29,7 @@ sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com 
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison virtualbox vagrant unrar
+sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison virtualbox vagrant unrar speedtest-cli
 
 echo '✨ Installing apt packages'
 
@@ -97,12 +97,10 @@ then
   gvm use $go_version --default
 fi
 
-if ! command -v kind &> /dev/null
+if ! command -v k3d &> /dev/null
 then
-  echo '🚀 Placing kind'
-  wget -O /tmp/kind $(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | cut -d '"' -f 4 | grep "http.*kind-linux-amd64")
-  sudo chmod +x /tmp/kind
-  sudo mv /tmp/kind /usr/local/bin
+  echo '🚀 Placing k3d'
+  wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 fi
 
 if ! command -v ghget &> /dev/null
