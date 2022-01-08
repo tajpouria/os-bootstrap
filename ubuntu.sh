@@ -111,6 +111,13 @@ then
   sudo mv /tmp/ghget /usr/local/bin
 fi
 
+if ! command -v helm &> /dev/null
+then
+  echo '🚀 Placing helm'
+  wget -O /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+  bash /tmp/get_helm.sh
+fi
+
 
 echo '📌 Tunning configurations'
 
