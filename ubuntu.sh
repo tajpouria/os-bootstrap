@@ -42,7 +42,7 @@ sudo ubuntu-drivers autoinstall
 
 echo '✨ Installing snap packages'
 
-sudo snap install brave bitwarden skype dbeaver-ce postman
+sudo snap install brave bitwarden skype dbeaver-ce postman yq
 sudo snap install code kontena-lens --classic
 
 
