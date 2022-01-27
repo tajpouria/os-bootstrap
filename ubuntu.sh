@@ -49,11 +49,10 @@ if ! command -v zsh &>/dev/null; then
   echo '🚀 Placing zsh'
   sudo apt install -y zsh
   sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+  cp "$SCRIPT_DIR/.zshrc" $HOME
   chsh -s $(which zsh)
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  cp "$SCRIPT_DIR/.zshrc" $HOME
 fi
-
 
 if ! command -v docker-compose &>/dev/null; then
   echo '🚀 Placing docker-compose'
