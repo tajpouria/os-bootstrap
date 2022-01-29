@@ -17,6 +17,9 @@ sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/u
 # gcloud
 echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+# terraform
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 # virtualbox
 echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bionic contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
 wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
@@ -27,11 +30,11 @@ sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com 
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison virtualbox vagrant unrar speedtest-cli neofetch
+sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison virtualbox vagrant unrar speedtest-cli neofetch software-properties-common
 
 echo '✨ Installing apt packages'
 
-sudo apt install -y git htop kubectl python3-pip parcellite docker-ce google-cloud-sdk
+sudo apt install -y git htop kubectl python3-pip parcellite docker-ce google-cloud-sdk terraform
 
 echo '✨ Installing drivers'
 
@@ -102,17 +105,25 @@ fi
 
 echo '📌 Tunning configurations'
 
-echo '🚀 Setting Git global config'
-read -p "📝 Enter your Git username [tajpouria]: " GIT_USERNAME
-GIT_USERNAME=${GIT_USERNAME:-'tajpouria'}
-git config --global user.name $GIT_USERNAME
-read -p "📝 Enter your Git email [tajpouria.dev@gmail.com]: " git_email
-git_email=${git_email:-'tajpouria.dev@gmail.com'}
-git config --global user.email $git_email
-git config --global core.editor "vim"
+read -r -p "Do you want to set git configuration? [Y/n]" response
+response=${response,,} # toLower
+if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+  echo '🚀 Setting Git global config'
+  read -p "📝 Enter your Git username [tajpouria]: " GIT_USERNAME
+  GIT_USERNAME=${GIT_USERNAME:-'tajpouria'}
+  git config --global user.name $GIT_USERNAME
+  read -p "📝 Enter your Git email [tajpouria.dev@gmail.com]: " git_email
+  git_email=${git_email:-'tajpouria.dev@gmail.com'}
+  git config --global user.email $git_email
+  git config --global core.editor "vim"
+fi
 
-echo '🚀 Generating a SSH key'
-ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
+read -r -p "Do you want to a new SSH key pair? [Y/n]" response
+response=${response,,} # toLower
+if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+  echo '🚀 Generating a SSH key'
+  ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
+fi
 
 echo '🚀 Making projects directory'
 mkdir -p "$HOME/pro/src/github/$git_username"
