@@ -2,65 +2,85 @@
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 USERNAME=$(whoami)
+IS_WSL=0
 
 echo "📎 Configuration will be set for $USERNAME ($HOME)"
 read -p 'Press enter to accept and ctrl + c to deny: '
 
-echo '✨ Upgrading apt packages'
+if [[ -n "$WSL_DISTRO_NAME" ]]; then
+  echo 'WSL detected.'
+  read -p 'Press enter to accept and ctrl + c to deny: '
+  IS_WSL=1
+fi
+
+echo '✨ Installing apt packages'
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y git htop python3-pip apt-transport-https ca-certificates gnupg curl vim unrar speedtest-cli software-properties-common bison
 
 # k8s
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-# docker
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+sudo apt install -y kubectl
+
 # gcloud
 echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+sudo apt install -y google-cloud-sdk
+
 # terraform
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-# virtualbox
-echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bionic contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
-wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
-# vagrant
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt install -y terraform
 
-sudo apt update
-sudo apt upgrade -y
-sudo apt install -y apt-transport-https ca-certificates gnupg curl vim bison virtualbox vagrant unrar speedtest-cli neofetch software-properties-common
+if [ $IS_WSL -eq 0 ]; then
+  # docker
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+  sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  sudo apt install docker-ce
+fi
 
-echo '✨ Installing apt packages'
+if [ $IS_WSL -eq 0 ]; then
+  # virtualbox
+  echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bionic contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+  wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+  wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+  sudo apt install -y virtualbox
+fi
 
-sudo apt install -y git htop kubectl python3-pip parcellite docker-ce google-cloud-sdk terraform
+if [ $IS_WSL -eq 0 ]; then
+  # vagrant
+  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+  sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  sudo apt install -y vagrant
+fi
 
-echo '✨ Installing drivers'
+if [ $IS_WSL -eq 0 ]; then
+  sudo apt install -y parcellite
+fi
 
-sudo ubuntu-drivers autoinstall
+if [ $IS_WSL -eq 0 ]; then
+  echo '✨ Installing drivers'
+  sudo ubuntu-drivers autoinstall
+fi
 
-echo '✨ Installing snap packages'
-
-sudo snap install brave bitwarden skype dbeaver-ce postman yq
-sudo snap install code --classic
-sudo snap install kontena-lens --classic
+if [ $IS_WSL -eq 0 ]; then
+  echo '✨ Installing Snap packages'
+  sudo snap install brave bitwarden skype dbeaver-ce postman yq
+  sudo snap install code --classic
+  sudo snap install kontena-lens --classic
+fi
 
 echo '✨ Installing other packages'
 
 if ! command -v zsh &>/dev/null; then
   echo '🚀 Placing zsh'
   sudo apt install -y zsh
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
   cp "$SCRIPT_DIR/.zshrc" $HOME
   chsh -s $(which zsh)
-  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-fi
-
-if ! command -v docker-compose &>/dev/null; then
-  echo '🚀 Placing docker-compose'
-  sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  sudo chmod +x /usr/local/bin/docker-compose
 fi
 
 if ! command -v node &>/dev/null; then
@@ -101,6 +121,14 @@ if ! command -v helm &>/dev/null; then
   echo '🚀 Placing helm'
   wget -O /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
   bash /tmp/get_helm.sh
+fi
+
+if [ $IS_WSL -eq 0 ]; then
+  if ! command -v docker-compose &>/dev/null; then
+    echo '🚀 Placing docker-compose'
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+  fi
 fi
 
 echo '📌 Tunning configurations'
