@@ -22,3 +22,5 @@ echo 'Install WSL'
 
 wsl --install
 wsl --set-default-version 2
+wsl --set-default Ubuntu
+
