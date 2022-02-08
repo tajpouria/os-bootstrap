@@ -84,6 +84,13 @@ if ! command -v zsh &>/dev/null; then
   chsh -s $(which zsh)
 fi
 
+
+if ! command -v tmux &>/dev/null; then
+  echo '🚀 Placing tmux'
+  sudo apt install -y tmux
+  cp "$SCRIPT_DIR/.tmux.con" $HOME
+fi
+
 if ! command -v node &>/dev/null; then
   echo '🚀 Placing nvm'
   wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
