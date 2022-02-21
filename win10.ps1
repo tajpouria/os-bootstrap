@@ -15,7 +15,7 @@ if (-not (Get-Command 'choco' -errorAction SilentlyContinue))
 echo 'Install Chocolatey packages'
 
 choco feature enable -n allowGlobalConfirmation
-choco install brave vscode bitwarden skype postman lens docker-desktop microsoft-windows-terminal
+choco install brave vscode bitwarden skype postman lens docker-desktop microsoft-windows-terminal bloomrpc
 
 
 echo 'Install WSL'
