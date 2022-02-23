@@ -34,6 +34,12 @@ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt install -y terraform
 
+# ngrok
+curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+sudo apt update
+sudo apt install ngrok
+
 if [ $IS_WSL -eq 0 ]; then
   # docker
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -83,7 +89,6 @@ if ! command -v zsh &>/dev/null; then
   cp "$SCRIPT_DIR/.zshrc" $HOME
   chsh -s $(which zsh)
 fi
-
 
 if ! command -v tmux &>/dev/null; then
   echo '🚀 Placing tmux'
