@@ -17,7 +17,7 @@ echo '✨ Installing apt packages'
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y git htop python3-pip apt-transport-https ca-certificates gnupg curl vim unrar speedtest-cli software-properties-common bison
+sudo apt install -y git htop python3-pip apt-transport-https ca-certificates gnupg curl nvim unrar speedtest-cli software-properties-common bison
 
 # k8s
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -157,7 +157,7 @@ if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
   read -p "📝 Enter your Git email [tajpouria.dev@gmail.com]: " git_email
   git_email=${git_email:-'tajpouria.dev@gmail.com'}
   git config --global user.email $git_email
-  git config --global core.editor "vim"
+  git config --global core.editor "nvim"
 fi
 
 read -r -p "Do you want to a new SSH key pair? [Y/n]" response
