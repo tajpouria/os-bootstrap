@@ -17,7 +17,7 @@ echo '✨ Installing apt packages'
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y git htop python3-pip apt-transport-https ca-certificates gnupg curl nvim unrar speedtest-cli software-properties-common bison
+sudo apt install -y git htop python3-pip apt-transport-https ca-certificates gnupg curl nvim unrar speedtest-cli software-properties-common bison ipcalc
 
 # k8s
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
