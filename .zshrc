@@ -125,7 +125,6 @@ else
     fi
 fi
 unset __conda_setup
-# <<< conda initialize <<<
 
 # GVM
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
