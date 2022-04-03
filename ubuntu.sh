@@ -29,13 +29,10 @@ echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.clou
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 sudo apt install -y google-cloud-sdk
 
-# terraform
+# Hashicorp tools
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt install -y terraform
-
-# vagrant
-sudo apt install -y vagrant
+sudo apt install -y terraform vagrant
 
 # ngrok
 curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
@@ -57,13 +54,6 @@ if [ $IS_WSL -eq 0 ]; then
   wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
   wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
   sudo apt install -y virtualbox
-fi
-
-if [ $IS_WSL -eq 0 ]; then
-  # vagrant
-  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  sudo apt install -y vagrant
 fi
 
 if [ $IS_WSL -eq 0 ]; then
@@ -146,6 +136,12 @@ if [ $IS_WSL -eq 0 ]; then
     sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
   fi
+fi
+
+if [ $IS_WSL -eq 1 ]; then
+  echo '🚀 Placing vagrant to run on WSL'
+  vagrant plugin install virtualbox_WSL2
+  vagrant plugin install vagrant-vbguest
 fi
 
 echo '📌 Tunning configurations'
