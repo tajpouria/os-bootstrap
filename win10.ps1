@@ -24,3 +24,7 @@ wsl --install
 wsl --set-default-version 2
 wsl --set-default Ubuntu
 
+echo "Install Long Paths"
+
+New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+>> -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
