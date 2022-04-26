@@ -3,7 +3,6 @@
   connection: local
 
   pre_tasks:
-    
     - name: Update apt cache if it's needed.
       apt:
         update_cache: true
@@ -12,7 +11,6 @@
       become: true
 
   tasks:
-
     - name: Install prerequisite apt packages.
       apt:
         name:
@@ -25,18 +23,17 @@
           - software-properties-common
           - bison
 
-
     - name: Import the 3rd party apt packages GPG keys.
       apt_key:
         url: "{{ item }}"
         state: present
       with_items:
-          - https://baltocdn.com/helm/signing.asc
-          - https://apt.releases.hashicorp.com/gpg
-          - https://download.docker.com/linux/ubuntu/gpg
-          - https://ngrok-agent.s3.amazonaws.com/ngrok.asc
-          - https://www.virtualbox.org/download/oracle_vbox_2016.asc 
-          - https://www.virtualbox.org/download/oracle_vbox.asc 
+        - https://baltocdn.com/helm/signing.asc
+        - https://apt.releases.hashicorp.com/gpg
+        - https://download.docker.com/linux/ubuntu/gpg
+        - https://ngrok-agent.s3.amazonaws.com/ngrok.asc
+        - https://www.virtualbox.org/download/oracle_vbox_2016.asc
+        - https://www.virtualbox.org/download/oracle_vbox.asc
       become: true
 
     - name: Import the 3rd party apt packages GPG keys. (trusted-gpg)
@@ -58,19 +55,19 @@
         filename: "{{ item.file_name }}"
         update_cache: true
       with_items:
-        - repo: 'deb [signed-by=/etc/apt/trusted.gpg.d/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main'
+        - repo: "deb [signed-by=/etc/apt/trusted.gpg.d/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
           file_name: google-cloud-sdk
-        - repo: 'deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main'
+        - repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
           file_name: kubernetes
-        - repo: 'deb https://baltocdn.com/helm/stable/debian/ all main'
+        - repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
           file_name: helm-stable-debian
-        - repo: 'deb [arch=amd64] https://apt.releases.hashicorp.com xenial main'
+        - repo: "deb [arch=amd64] https://apt.releases.hashicorp.com xenial main"
           file_name: hashicorp
-        - repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'
+        - repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
           file_name: docker
-        - repo: 'deb https://ngrok-agent.s3.amazonaws.com buster main'
+        - repo: "deb https://ngrok-agent.s3.amazonaws.com buster main"
           file_name: ngrok
-        - repo: 'deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian buster contrib'
+        - repo: "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian buster contrib"
           file_name: virtualbox
       become: true
 
@@ -98,7 +95,7 @@
 
     - name: Install Snap packages.
       snap:
-        name: 
+        name:
           - brave
           - skype
           - bitwarden
@@ -106,7 +103,7 @@
 
     - name: Install Snap packages. (classic)
       snap:
-        name: 
+        name:
           - code
         classic: true
       become: true
