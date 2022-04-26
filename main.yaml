@@ -104,3 +104,9 @@
           - bitwarden
       become: true
 
+    - name: Install Snap packages. (classic)
+      snap:
+        name: 
+          - code
+        classic: true
+      become: true
