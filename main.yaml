@@ -1,6 +1,10 @@
+---
 - name: Operating System Bootstrap
   hosts: localhost
   connection: local
+
+  vars_files:
+    - vars.yaml
 
   pre_tasks:
     - name: Update apt cache if it's needed.
@@ -10,7 +14,6 @@
         cache_valid_time: 3600
       become: true
 
-  tasks:
     - name: Install prerequisite apt packages.
       apt:
         name:
@@ -22,6 +25,29 @@
           - python3-pip
           - software-properties-common
           - bison
+      become: true
+
+  roles:
+    - role: gantsign.oh-my-zsh
+      users:
+        - username: "{{ username }}"
+          oh_my_zsh:
+            plugins:
+              - git
+              - zsh-autosuggestions
+              - kubectl
+
+  tasks:
+    - name: Clone zsh extra plugins.
+      git:
+        repo: "{{ item.repo }}"
+        dest: "{{ item.dest }}"
+        update: true
+      with_items:
+        - repo: https://github.com/zsh-users/zsh-autosuggestions
+          dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+        - repo: https://github.com/zsh-users/zsh-syntax-highlighting
+          dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 
     - name: Import the 3rd party apt packages GPG keys.
       apt_key:
