@@ -18,10 +18,9 @@ source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighti
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-# Terraform
+# Auto complete
 complete -o nospace -C /usr/bin/terraform terraform
-
-# WSL
+complete -C /usr/local/bin/aws_completer aws
 
 # Vagrant WSL access
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
