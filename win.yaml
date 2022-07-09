@@ -1,0 +1,7 @@
+---
+- name: Windows Bootstrap
+  hosts: win
+  gather_facts: false
+  tasks:
+    - name: Install Chocolatey
+      win_chocolatey: name=procexp state=present
