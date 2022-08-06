@@ -11,13 +11,13 @@ os_bootstrap_repo_http_url="https://github.com/tajpouria/os-bootstrap"
 
 if [ ! -d "$os_bootstrap_repo_dir" ]
 then
-    echo "✨ Cloning OS bootstrap repository into '$repo_dir'"
-    mkdir -p "$repos_dir" && cd "$repos_dir"
-    git clone "$os_boottsrap_repo_http_url"
+    echo "✨ Cloning OS bootstrap repository into '$repos_dir'"
+    mkdir -p "$repos_dir"
+    cd "$repos_dir"
+    git clone "$os_bootstrap_repo_http_url"
     cd "$os_bootstrap_repo_dir"
 else
    echo "✨ Pulling the OS bootstrap latest changes"
    cd "$os_bootstrap_repo_dir" 
    git pull origin master
 fi
-
