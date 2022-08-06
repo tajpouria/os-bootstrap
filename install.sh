@@ -21,3 +21,7 @@ else
    cd "$os_bootstrap_repo_dir" 
    git pull origin master
 fi
+
+python3 -m venv venv
+source venv/bin/activate
+which python
