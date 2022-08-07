@@ -39,6 +39,7 @@
         - https://ngrok-agent.s3.amazonaws.com/ngrok.asc
         - https://www.virtualbox.org/download/oracle_vbox_2016.asc
         - https://www.virtualbox.org/download/oracle_vbox.asc
+        - https://packages.microsoft.com/keys/microsoft.asc
       become: true
 
     - name: Import the 3rd party apt packages GPG keys. (trusted-gpg)
@@ -74,6 +75,8 @@
           file_name: ngrok
         - repo: "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian buster contrib"
           file_name: virtualbox
+        - repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+          file_name: vscode
       become: true
 
     - name: Install apt packages.
@@ -94,6 +97,28 @@
           - vagrant
           - ngrok
           - virtualbox
+          - code
         state: present
       become: true
 
+    - name: Check if AWS CLI exists
+      stat:
+        path: /usr/local/bin/aws
+      register: aws_stat
+
+    - name: Download AWS CLI.
+      get_url:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: /tmp/awscliv2.zip
+      when: aws_stat.stat.exists == False
+
+    - name: Unzip AWS CLI.
+      unarchive:
+        src: /tmp/awscliv2.zip
+        dest: /tmp/
+      when: aws_stat.stat.exists == False
+
+    - name: Install AWS CLI
+      become: true
+      shell: /tmp/aws/install
+      when: aws_stat.stat.exists == False

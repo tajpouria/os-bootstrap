@@ -1,0 +1,13 @@
+---
+- name: Company Bootstrap
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Download binary packages.
+      become: true
+      get_url:
+        url: "https://github.com/99designs/aws-vault/releases/download/v6.6.0/aws-vault-linux-amd64"
+        mode: 755
+        dest: "/usr/local/bin/aws-vault"
+        checksum: "sha256:f4571f90a4847ea42c239ebbef058d18baccfe9f28092ace84f348c7cd29aa19"
