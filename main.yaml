@@ -77,7 +77,10 @@
           file_name: virtualbox
         - repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
           file_name: vscode
-      become: true
+      become: true##
+# RDS supply
+##
+
 
     - name: Install apt packages.
       apt:
@@ -87,8 +90,9 @@
           - curl
           - unrar
           - ipcalc
+          - fish
           # GUI
-          - copyq
+          - parcellite
           # 3rd party
           - google-cloud-sdk
           - kubectl
@@ -101,7 +105,7 @@
         state: present
       become: true
 
-    - name: Check if AWS CLI exists
+    - name: Check if AWS CLI exists.
       stat:
         path: /usr/local/bin/aws
       register: aws_stat
