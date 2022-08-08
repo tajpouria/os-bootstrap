@@ -22,6 +22,7 @@
           - apt-transport-https
           - gnupg
           - ca-certificates
+          - lsb-release
           - python3-pip
           - software-properties-common
           - bison
@@ -52,6 +53,8 @@
           keyring: /etc/apt/trusted.gpg.d/cloud.google.gpg
         - url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
           keyring: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+        - url: https://download.docker.com/linux/debian/gpg
+          keyring: /etc/apt/keyrings/docker.gpg
       become: true
 
     - name: Add the 3rd party apt packages repositories.
@@ -69,18 +72,15 @@
           file_name: helm-stable-debian
         - repo: "deb [arch=amd64] https://apt.releases.hashicorp.com xenial main"
           file_name: hashicorp
-        - repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-          file_name: docker
         - repo: "deb https://ngrok-agent.s3.amazonaws.com buster main"
           file_name: ngrok
         - repo: "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian buster contrib"
           file_name: virtualbox
         - repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
           file_name: vscode
-      become: true##
-# RDS supply
-##
-
+        - repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian stretch stable"
+          file_name: docker
+      become: true
 
     - name: Install apt packages.
       apt:
@@ -103,6 +103,20 @@
           - virtualbox
           - code
         state: present
+        autoclean: true
+      become: true
+
+    - name: Check if Docker CLI exists.
+      stat:
+        path: /usr/local/bin/docker
+      register: docker_stat
+
+    - name: Install desktop-docker deb package.
+      apt:
+        deb: "https://desktop.docker.com/linux/main/amd64/docker-desktop-4.11.0-amd64.deb"
+        state: present
+        autoclean: true
+      when: docker_stat.stat.exists == False
       become: true
 
     - name: Check if AWS CLI exists.
@@ -123,6 +137,6 @@
       when: aws_stat.stat.exists == False
 
     - name: Install AWS CLI
-      become: true
       shell: /tmp/aws/install
       when: aws_stat.stat.exists == False
+      become: true
