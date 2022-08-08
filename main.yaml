@@ -21,6 +21,7 @@
           - curl
           - apt-transport-https
           - gnupg
+          - pass
           - ca-certificates
           - lsb-release
           - python3-pip
