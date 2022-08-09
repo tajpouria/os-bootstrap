@@ -164,3 +164,17 @@
       with_items:
         - aliz-ai/google-cloud-sdk-fish-completion
         - evanlucas/fish-kubectl-completions
+
+    - name: Check pyenv exists.
+      stat:
+        path: ~/.pyenv/bin/pyenv
+      register: pyenv_stat
+
+    - name: Install pyenv.
+      shell: curl https://pyenv.run | bash
+      when: pyenv_stat.stat.exists == False
+
+    - name: Copy config.fish.
+      copy:
+        src: ./config.fish
+        dest: ~/config.fish
