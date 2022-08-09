@@ -96,6 +96,7 @@
           - parcellite
           # 3rd party
           - google-cloud-sdk
+          - google-cloud-sdk-gke-gcloud-auth-plugin
           - kubectl
           - helm
           - terraform
@@ -141,3 +142,25 @@
       shell: /tmp/aws/install
       when: aws_stat.stat.exists == False
       become: true
+
+    - name: Check if fisher installed.
+      shell: fisher --version
+      args:
+        executable: /usr/bin/fish
+      ignore_errors: true
+      changed_when: false
+      register: fisher_version
+
+    - name: Install fisher v4.
+      shell: "curl -sL https://git.io/fisher | source - && fisher install jorgebucaran/fisher"
+      args:
+        executable: /usr/bin/fish
+      when: fisher_version.stdout == ""
+
+    - name: install fisher plugins.
+      shell: "fisher install {{ item }}"
+      args:
+        executable: /usr/bin/fish
+      with_items:
+        - aliz-ai/google-cloud-sdk-fish-completion
+        - evanlucas/fish-kubectl-completions
