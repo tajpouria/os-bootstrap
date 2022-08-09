@@ -4,10 +4,27 @@
   connection: local
 
   tasks:
-    - name: Download binary packages.
-      become: true
+    - name: Check if aws-vault CLI exists.
+      stat:
+        path: /usr/local/bin/aws-vault
+      register: awsvault_stat
+
+    - name: Install aws-vault binary package.
       get_url:
         url: "https://github.com/99designs/aws-vault/releases/download/v6.6.0/aws-vault-linux-amd64"
         mode: 755
         dest: "/usr/local/bin/aws-vault"
         checksum: "sha256:f4571f90a4847ea42c239ebbef058d18baccfe9f28092ace84f348c7cd29aa19"
+      when: awsvault_stat.stat.exists == False
+      become: true
+
+    - name: Check if Hasura CLI exists.
+      stat:
+        path: /usr/local/bin/hasura
+      register: hasura_stat
+
+    # TODO: Install w/ npm -g
+    - name: Install hasura binary package.
+      shell: "curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash"
+      when: hasura_stat.stat.exists == False
+      become: true
