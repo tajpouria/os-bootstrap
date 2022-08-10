@@ -28,3 +28,10 @@
       shell: "curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash"
       when: hasura_stat.stat.exists == False
       become: true
+
+    - name: Install apt packages.
+      apt:
+        name:
+          - kafkacat
+        state: present
+      become: true
