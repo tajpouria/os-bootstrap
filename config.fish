@@ -9,3 +9,7 @@ pyenv init - | source
 set -e _OLD_FISH_PROMPT_OVERRIDE 
 set -e _OLD_VIRTUAL_PYTHONHOME
 set -e _OLD_VIRTUAL_PATH
+
+function nvm
+    bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
+end

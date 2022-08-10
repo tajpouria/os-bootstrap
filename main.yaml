@@ -155,17 +155,25 @@
           cmd: "fisher install aliz-ai/google-cloud-sdk-fish-completion"
         - path: completions/kubectl.fish
           cmd: "fisher install evanlucas/fish-kubectl-completions"
-
-    - name: Check pyenv exists.
-      stat:
-        path: ~/.pyenv/bin/pyenv
-      register: pyenv_stat
-
-    - name: Install pyenv.
-      shell: curl https://pyenv.run | bash
-      when: pyenv_stat.stat.exists == False
+        - path: completions/nvm.fish
+          cmd: "fisher install jorgebucaran/nvm.fish"
+        - path: functions/bass.fish
+          cmd: "fisher install edc/bass"
 
     - name: Copy config.fish.
       copy:
         src: ./config.fish
-        dest: ~/.config/fish/config.fish
+        dest: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+
+    - name: Install pyenv.
+      shell: curl https://pyenv.run | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.pyenv/bin/pyenv"
+        executable: /usr/bin/fish
+
+    - name: Install NVM.
+      shell: >
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+        executable: /usr/bin/fish
