@@ -118,18 +118,12 @@
         autoclean: true
       become: true
 
-    - name: Check if Docker CLI exists.
-      stat:
-        path: /usr/local/bin/docker
-      register: docker_stat
-
-    - name: Install desktop-docker deb package.
-      apt:
-        deb: "https://desktop.docker.com/linux/main/amd64/docker-desktop-4.11.0-amd64.deb"
-        state: present
-        autoclean: true
-      when: docker_stat.stat.exists == False
-      become: true
+    - include_tasks: ./tasks/install-deb-packages.yaml
+      with_items:
+        - path: /usr/local/bin/docker
+          url: "https://desktop.docker.com/linux/main/amd64/docker-desktop-4.11.0-amd64.deb"
+        - path: /usr/bin/lens
+          url: "https://api.k8slens.dev/binaries/Lens-6.0.0-latest.20220728.2.amd64.deb"
 
     - name: Check if AWS CLI exists.
       stat:

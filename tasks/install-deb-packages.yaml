@@ -1,0 +1,13 @@
+---
+- name: Check if package already exists ({{ item.path }}).
+  stat:
+    name: "{{ item.path }}"
+  register: package_stat
+
+- name: "Install deb package ({{ item.path }})."
+  apt:
+    deb: "{{ item.url }}"
+    state: present
+    autoclean: true
+  when: package_stat.stat.exists == False
+  become: true
