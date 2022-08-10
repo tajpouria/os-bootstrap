@@ -28,6 +28,7 @@
           - software-properties-common
           - bison
           - libedit-dev
+          - libreadline-dev
       become: true
 
   tasks:
