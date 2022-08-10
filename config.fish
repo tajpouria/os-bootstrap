@@ -4,3 +4,8 @@ if status is-interactive
 end
 
 pyenv init - | source
+
+# ". ./venv/bin/activate.fish" problem
+set -e _OLD_FISH_PROMPT_OVERRIDE 
+set -e _OLD_VIRTUAL_PYTHONHOME
+set -e _OLD_VIRTUAL_PATH
