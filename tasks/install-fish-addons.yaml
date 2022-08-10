@@ -1,11 +1,6 @@
 ---
-- name: Check if addon already exists ({{ item.path }}).
-  stat:
-    name: "{{ ansible_env.HOME }}/.config/fish/{{ item.path }}"
-  register: addon_stat
-
 - name: "Install fish addon ({{ item.path }})."
   shell: "{{ item.cmd }}"
   args:
     executable: /usr/bin/fish
-  when: addon_stat.stat.exists == False
+    creates: "{{ item.path }}"

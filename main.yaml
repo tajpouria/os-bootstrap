@@ -124,6 +124,8 @@
           url: "https://desktop.docker.com/linux/main/amd64/docker-desktop-4.11.0-amd64.deb"
         - path: /usr/bin/lens
           url: "https://api.k8slens.dev/binaries/Lens-6.0.0-latest.20220728.2.amd64.deb"
+        - path: /usr/bin/dbeaver
+          url: "https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb"
 
     - name: Check if AWS CLI exists.
       stat:
