@@ -27,6 +27,7 @@
           - python3-pip
           - software-properties-common
           - bison
+          - libedit-dev
       become: true
 
   tasks:
@@ -143,27 +144,14 @@
       when: aws_stat.stat.exists == False
       become: true
 
-    - name: Check if fisher installed.
-      shell: fisher --version
-      args:
-        executable: /usr/bin/fish
-      ignore_errors: true
-      changed_when: false
-      register: fisher_version
-
-    - name: Install fisher v4.
-      shell: "curl -sL https://git.io/fisher | source - && fisher install jorgebucaran/fisher"
-      args:
-        executable: /usr/bin/fish
-      when: fisher_version.stdout == ""
-
-    - name: install fisher plugins.
-      shell: "fisher install {{ item }}"
-      args:
-        executable: /usr/bin/fish
+    - include_tasks: ./tasks/install-fish-addons.yaml
       with_items:
-        - aliz-ai/google-cloud-sdk-fish-completion
-        - evanlucas/fish-kubectl-completions
+        - path: completions/fisher.fish # Fisher must be the first item.
+          cmd: "curl -sL https://git.io/fisher | source - && fisher install jorgebucaran/fisher"
+        - path: completions/gcloud.fish
+          cmd: "fisher install aliz-ai/google-cloud-sdk-fish-completion"
+        - path: completions/kubectl.fish
+          cmd: "fisher install evanlucas/fish-kubectl-completions"
 
     - name: Check pyenv exists.
       stat:
@@ -177,4 +165,4 @@
     - name: Copy config.fish.
       copy:
         src: ./config.fish
-        dest: ~/config.fish
+        dest: ~/.config/fish/config.fish
