@@ -27,8 +27,16 @@
           - python3-pip
           - software-properties-common
           - bison
+          # pyenv requirements
           - libedit-dev
           - libreadline-dev
+          - zlib1g-dev
+          - libbz2-dev
+          - libssl-dev
+          - libsqlite3-dev
+          - liblzma-dev
+          - python3-tk
+          - tk-dev
       become: true
 
   tasks:
