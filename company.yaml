@@ -35,3 +35,8 @@
           - kafkacat
         state: present
       become: true
+
+    - include_tasks: ./tasks/install-deb-packages.yaml
+      with_items:
+        - path: /usr/bin/pomerium-cli
+          url: "https://github.com/pomerium/cli/releases/download/v0.18.0/pomerium-cli_0.18.0-1_amd64.deb"
