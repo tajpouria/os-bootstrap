@@ -3,4 +3,4 @@
   shell: "{{ item.cmd }}"
   args:
     executable: /usr/bin/fish
-    creates: "{{ item.path }}"
+    creates: "{{ ansible_env.HOME }}/.config/fish/{{ item.path }}"

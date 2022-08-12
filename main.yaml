@@ -43,6 +43,7 @@
     - name: Import the 3rd party apt packages GPG keys.
       apt_key:
         url: "{{ item }}"
+        keyring: "/etc/apt/trusted.gpg.d/trusted.gpg"
         state: present
       with_items:
         - https://baltocdn.com/helm/signing.asc
@@ -126,6 +127,8 @@
           url: "https://api.k8slens.dev/binaries/Lens-6.0.0-latest.20220728.2.amd64.deb"
         - path: /usr/bin/dbeaver
           url: "https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb"
+        - path: /usr/bin/google-chrome
+          url: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
     - name: Check if AWS CLI exists.
       stat:
