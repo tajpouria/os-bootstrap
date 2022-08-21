@@ -101,6 +101,7 @@
           - htop
           - curl
           - unrar
+          - jq
           - ipcalc
           - fish
           # GUI
