@@ -13,7 +13,3 @@ set -e _OLD_VIRTUAL_PATH
 function nvm
     bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
 end
-
-function gvm
-  bass source ~/.gvm/scripts/gvm ';' gvm $argv
-end

@@ -1,0 +1,6 @@
+---
+- name: "Install asdf plugin ({{ item.path }})."
+  shell: "{{ item.cmd }}"
+  args:
+    executable: /usr/bin/fish
+    creates: "{{ ansible_env.HOME }}/.asdf/{{ item.path }}"

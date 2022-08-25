@@ -165,6 +165,8 @@
           cmd: "fisher install jorgebucaran/nvm.fish"
         - path: functions/bass.fish
           cmd: "fisher install edc/bass"
+        - path: completions/asdf.fish
+          cmd: "fisher install rstacruz/fish-asdf"
 
     - name: Copy config.fish.
       copy:
@@ -184,9 +186,15 @@
         creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
         executable: /usr/bin/fish
 
-    - name: Install GVM.
-      shell: >
-        curl -o- https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
-      args:
-        creates: "{{ ansible_env.HOME }}/.gvm/bin/gvm"
-        executable: /usr/bin/fish
+    - name: Install asdf.
+      git:
+        repo: https://github.com/asdf-vm/asdf.git
+        dest: "{{ ansible_env.HOME }}/.asdf"
+        single_branch: true
+        version: v0.10.2
+        update: false
+
+    - include_tasks: ./tasks/install-asdf-plugins.yaml
+      with_items:
+        - path: plugins/golang/README.md
+          cmd: "asdf plugin-add golang https://github.com/kennyp/asdf-golang.git"
