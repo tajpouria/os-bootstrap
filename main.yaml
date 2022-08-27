@@ -153,6 +153,28 @@
       when: aws_stat.stat.exists == False
       become: true
 
+    - name: Check Postman exists.
+      stat:
+        path: "{{ ansible_env.HOME }}/Postman/Postman"
+      register: postman_stat
+
+    - name: Download Postman.
+      get_url:
+        url: https://dl.pstmn.io/download/latest/linux64
+        dest: /tmp/postman-linux-x64.tar.gz
+      when: postman_stat.stat.exists == False
+
+    - name: Unzip Postman.
+      unarchive:
+        src: /tmp/postman-linux-x64.tar.gz
+        dest: "{{ ansible_env.HOME }}/"
+      when: postman_stat.stat.exists == False
+
+    - name: Create Postman desktop entry.
+      template:
+        src: ./Postman.desktop.j2
+        dest: "{{ ansible_env.HOME }}/.local/share/applications/Postman.desktop"
+
     - include_tasks: ./tasks/install-fish-addons.yaml
       with_items:
         - path: completions/fisher.fish # Fisher must be the first item.
