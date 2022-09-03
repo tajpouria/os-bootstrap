@@ -208,6 +208,14 @@
         creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
         executable: /usr/bin/fish
 
+    - name: Install global node.js packages.
+      npm:
+        name: "{{ item }}"
+        global: yes
+      with_items:
+        - yarn
+        - gitget
+
     - name: Install asdf.
       git:
         repo: https://github.com/asdf-vm/asdf.git
