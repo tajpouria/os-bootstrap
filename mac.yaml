@@ -20,6 +20,8 @@
           - jq
           - ipcalc
           - fish
+          - kubectl
+          - helm
 
     - name: Ensure fish added to allowed shells.
       lineinfile:
