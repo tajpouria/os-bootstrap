@@ -2,5 +2,5 @@
 - name: "Install fish addon ({{ item.path }})."
   shell: "{{ item.cmd }}"
   args:
-    executable: /usr/bin/fish
+    executable: "{{ (os == 'macos') | ternary('/opt/homebrew/bin/fish', '/usr/bin/fish') }}"
     creates: "{{ ansible_env.HOME }}/.config/fish/{{ item.path }}"

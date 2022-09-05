@@ -27,5 +27,9 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-echo "✨ Running the install playbook"
-ansible-playbook ./main.yaml --ask-become-pass
+case "$(uname -s)" in
+    Linux*)     ansible-playbook ./main.yaml --ask-become-pas;;
+    Darwin*)    ansible-playbook ./mac.yaml --ask-become-pas;;
+    *)          echo 'Unsopported OS';;
+esac
+

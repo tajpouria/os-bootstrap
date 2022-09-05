@@ -1,0 +1,45 @@
+- name: Operating System Bootstrap
+  hosts: localhost
+  connection: local
+
+  vars:
+    - os: macos
+
+  pre_tasks:
+    - name: Upgrade
+      community.general.homebrew:
+        update_homebrew: true
+        upgrade_all: true
+
+  tasks:
+    - name: Install brew packages.
+      community.general.homebrew:
+        name:
+          # General
+          - htop
+          - jq
+          - ipcalc
+          - fish
+
+    - name: Ensure fish added to allowed shells.
+      lineinfile:
+        path: /etc/shells
+        regexp: ".*fish$"
+        line: /opt/homebrew/bin/fish
+      become: true
+
+    # TODO: Duplicated in main
+    - include_tasks: ./tasks/install-fish-addons.yaml
+      with_items:
+        - path: completions/fisher.fish # Fisher must be the first item.
+          cmd: "curl -sL https://git.io/fisher | source - && fisher install jorgebucaran/fisher"
+        - path: completions/gcloud.fish
+          cmd: "fisher install aliz-ai/google-cloud-sdk-fish-completion"
+        - path: completions/kubectl.fish
+          cmd: "fisher install evanlucas/fish-kubectl-completions"
+        - path: completions/nvm.fish
+          cmd: "fisher install jorgebucaran/nvm.fish"
+        - path: functions/bass.fish
+          cmd: "fisher install edc/bass"
+        - path: completions/asdf.fish
+          cmd: "fisher install rstacruz/fish-asdf"

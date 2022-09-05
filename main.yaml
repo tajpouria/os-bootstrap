@@ -99,7 +99,6 @@
         name:
           # General
           - htop
-          - curl
           - unrar
           - jq
           - ipcalc
