@@ -45,3 +45,8 @@
           cmd: "fisher install edc/bass"
         - path: completions/asdf.fish
           cmd: "fisher install rstacruz/fish-asdf"
+
+    - name: Copy config.fish.
+      copy:
+        src: ./config.mac.fish # Use config.fish and fill differences with jinja template
+        dest: "{{ ansible_env.HOME }}/.config/fish/config.fish"
