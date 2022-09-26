@@ -22,12 +22,14 @@
           - fish
           - kubectl
           - helm
+          - asdf
 
     - name: Install brew cask packages.
       community.general.homebrew_cask:
         name:
           - google-cloud-sdk
           - clipy
+          - docker
 
     - name: Ensure fish added to allowed shells.
       lineinfile:
@@ -35,6 +37,16 @@
         regexp: ".*fish$"
         line: /opt/homebrew/bin/fish
       become: true
+
+    - include_tasks: ./tasks/install-asdf-plugins.yaml
+      with_items:
+        - path: plugins/golang/README.md
+          cmd: "asdf plugin-add golang https://github.com/kennyp/asdf-golang.git"
+        - path: plugins/nodejs/README.md
+          cmd: "asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git"
+        - path: plugins/python/README.md
+          cmd: "asdf plugin-add python"
+        
 
     # TODO: Duplicated in main
     - include_tasks: ./tasks/install-fish-addons.yaml
