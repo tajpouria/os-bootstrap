@@ -31,6 +31,12 @@
           - clipy
           - docker
 
+    - name: Install brew cask packages.
+      community.general.homebrew_cask:
+        name:
+          - google-cloud-sdk
+          - clipy
+
     - name: Ensure fish added to allowed shells.
       lineinfile:
         path: /etc/shells
